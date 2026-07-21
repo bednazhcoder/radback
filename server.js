@@ -1,4 +1,4 @@
-const cors = require("cors");
+//const cors = require("cors");
 const app = express();
 app.use(cors({
   origin: "https://DEINE-NETLIFY-URL.netlify.app"
