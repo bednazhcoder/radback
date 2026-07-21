@@ -1,22 +1,18 @@
-//const cors = require("cors");
-const app = express();
-app.use(cors({
-  origin: "https://DEINE-NETLIFY-URL.netlify.app"
-}));
-
 const express = require("express");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: "https://radioactivityinaustria.netlify.app"
+}));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
 const DATA_FILE = "data.json";
 const HAUS_FILE = "haus_messungen.json";
-
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "1234";
 
@@ -67,7 +63,6 @@ app.get("/measurements", (req, res) => {
 // ADD
 app.post("/measurements", (req, res) => {
     const data = loadData();
-
     const newMeasurement = {
         id: Date.now().toString(),
         location: req.body.location,
@@ -77,7 +72,6 @@ app.post("/measurements", (req, res) => {
         lat: req.body.lat,
         lon: req.body.lon
     };
-
     data.push(newMeasurement);
     saveData(data);
     res.json({ success: true });
@@ -87,18 +81,15 @@ app.post("/measurements", (req, res) => {
 app.delete("/measurements/:id", (req, res) => {
     let data = loadData();
     const idToDelete = req.params.id;
-
     data = data.filter(m => m.id !== idToDelete);
     saveData(data);
-
     res.json({ success: true });
 });
 
-// UPDATE (NEU!)
+// UPDATE
 app.put("/measurements/:id", (req, res) => {
     let data = loadData();
     const idToUpdate = req.params.id;
-
     data = data.map(m => {
         if (m.id === idToUpdate) {
             return {
@@ -113,7 +104,6 @@ app.put("/measurements/:id", (req, res) => {
         }
         return m;
     });
-
     saveData(data);
     res.json({ success: true });
 });
